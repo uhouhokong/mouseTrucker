@@ -45,6 +45,14 @@ public class Scene : MonoBehaviour, OverButtonEvent {
             blind.color = c;
             break;
             case 4://重い箱
+            break;
+
+            case 5://切り替え
+            var c5 = blind.color;
+            c5.a = 0;
+            blind.color = c5;
+            break;
+            case 6://実験群
             Destroy(curFlont.gameObject);
             break;
         }
@@ -65,7 +73,7 @@ public class Scene : MonoBehaviour, OverButtonEvent {
             break;
             case 2://軽い箱
             curFlont = Instantiate(flontPrefab, new Vector2(camera.position.x + 1.2f, camera.position.y), Quaternion.identity);
-            curFlont.cargo.weightType = 1;
+            curFlont.cargo.weightType = 0;
             curFlont.cargo.slowable = false;
             break;
             case 3://切り替え
@@ -77,6 +85,17 @@ public class Scene : MonoBehaviour, OverButtonEvent {
             blindFlag = false;
             break;
             case 4://重い箱
+            break;
+
+            case 5://切り替え
+            var c5 = blind.color;
+            c5.a = 0;
+            blind.color = c5;
+            
+            time = 0;
+            blindFlag = false;
+            break;
+            case 6://実験群
             break;
         }
     }
@@ -106,9 +125,9 @@ public class Scene : MonoBehaviour, OverButtonEvent {
     float timeLimit = 1.8f;
     public AnimationCurve blindCurve;
 
-    //case 2,4関係
+    //case 2,4,6関係
     public void finishedTasks(){
-        if(state==2)changeState(3);
+        if(state!=6)changeState(state+1);
         else{
 
         }
@@ -137,25 +156,28 @@ public class Scene : MonoBehaviour, OverButtonEvent {
     public bool blindFlag = false;
     void Update(){
         if(Input.GetKeyDown(KeyCode.L))Application.LoadLevel("Scenes/main");
+
+        if(Input.GetKey(KeyCode.T) && Input.GetKey(KeyCode.A) && Input.GetKeyDown(KeyCode.S))changeState(5);
         switch(state){
-            case 3:
+            case 3:case 5:
             
             var c = blind.color;
             c.a = blindCurve.Evaluate(time/timeLimit);
             blind.color = c;
             
             if(time>timeLimit * 0.7f && !blindFlag){
+                if(curFlont!=null)
                 Destroy(curFlont.gameObject);
                 blindFlag = true;
                 curFlont = Instantiate(flontPrefab, new Vector2(camera.position.x + 1.2f, camera.position.y), Quaternion.identity);
-                curFlont.cargo.weightType = 0;
+                curFlont.cargo.weightType = (state-1)/2;
                 if(group == Group.A){curFlont.cargo.slowable = false;}
-                if(group == Group.B){curFlont.cargo.slowable = true;}
-                curFlont.cursol.section = 1;
+                if(group == Group.B && (state-1)/2 == 2){curFlont.cargo.slowable = true;}
+                curFlont.cursol.section = (state-1)/2;
 
         
             }
-            if(time>timeLimit)changeState(4);
+            if(time>timeLimit)changeState(state+1);
 
             time += Time.deltaTime;
 
