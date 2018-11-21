@@ -45,7 +45,7 @@ public class OverButton : MonoBehaviour {
                 dead = true;
                 Destroy(gameObject);
             }
-            time+=Time.deltaTime;
+            time+=Time.deltaTime / Time.timeScale;
         }
         else{
             time = 0;
