@@ -61,8 +61,8 @@ public class Cursol : MonoBehaviour, OverButtonEvent {
             answerReminder.transform.parent = camera;
             answerReminder.transform.localPosition = new Vector3(0, 0.82f, 0);
             answerReminder.transform.position = new Vector3(answerReminder.transform.position.x, answerReminder.transform.position.y, 0);
-            if(section == 2){
-                answerReminder.GetComponent<TextMesh>().text = "you complited tasks.\nPlease answer some questions.\n";
+            if(section == 1){
+                answerReminder.GetComponent<TextMesh>().text = "you complited tasks on PC.\nPlease answer some questions.\n";
             }else{
 
                 b =  Instantiate(buttonPrefab, tail.transform.position + new Vector3(0f, -1.05f,0), Quaternion.identity);
@@ -132,9 +132,8 @@ public class Cursol : MonoBehaviour, OverButtonEvent {
         pullReminder.transform.position = new Vector3(pullReminder.transform.position.x, pullReminder.transform.position.y, 0);
 
         leftNumber.text = "left: "+taskNum+"times";
-        if(section==0)      sectionCount.text = "step: "+"A, weight: 0";
-        else if(section==1) sectionCount.text = "step: "+"B, weight: 10";
-        else                sectionCount.text = "step: "+"C, weight: ?";
+        if(section==0)  sectionCount.text = "step: "+"A";
+        else            sectionCount.text = "step: "+"B";
         leftNumber.transform.parent = camera;
         sectionCount.transform.parent = camera;
 	}
